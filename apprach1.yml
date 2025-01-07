@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authproxy
+  namespace: ticketsapp
+  labels:
+    app: authproxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authproxy
+  template:
+    metadata:
+      labels:
+        app: authproxy
+    spec:
+      containers:
+        - name: authproxy
+          image: authproxy-0948
+          ports:
+            - containerPort: 8001
+          envFrom:
+            - configMapRef:
+                name: app-config

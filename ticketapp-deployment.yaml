@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticketsapp
+  namespace: ticketsapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ticketsapp
+  template:
+    metadata:
+      labels:
+        app: ticketsapp
+    spec:
+      containers:
+      - name: apigateway
+        image: bk10d/apigateway:v1
+        # imagePullPolicy: Never
+        ports:
+          - containerPort: 8000
+        envFrom:
+          - configMapRef:
+              name: app-config
+      - name: servicetypes
+        image: bk10d/servicetypes:v5
+        # imagePullPolicy: Never
+        ports:
+          - containerPort: 8001
+        envFrom:
+          - configMapRef:
+              name: app-config
+      - name: systementry
+        image: bk10d/systementry:v2
+        # imagePullPolicy: Never
+        ports:
+          - containerPort: 8010
+        envFrom:
+          - configMapRef:
+              name: app-config
